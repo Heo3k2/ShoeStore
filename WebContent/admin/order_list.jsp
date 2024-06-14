@@ -5,13 +5,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=yes">
-	<title>Managing Orders</title>
-	<script type="text/javascript" src="../js/jquery-3.7.1.min.js"></script>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-	
+		<title>Managing Orders</title>
+		<jsp:include page="pagehead.jsp"></jsp:include>
 </head>
 <body>
 	<jsp:directive.include file="header.jsp"/>
@@ -25,9 +20,18 @@
 	<br>
 	
 	<c:if test="${message != null}">
-		<div align="center" style="color: red;">
-			<h4>${message}</h4>
-		</div>
+	    <c:choose>
+	        <c:when test="${message.contains('successfully')}">
+	            <div align="center" class="alert alert-info" role="alert">
+	                <h4>${message}</h4>
+	            </div>
+	        </c:when>
+	        <c:otherwise>
+	            <div align="center" class="alert alert-danger" role="alert">
+	                <h4>${message}</h4>
+	            </div>
+	        </c:otherwise>
+	    </c:choose>
 	</c:if>
 	
 	<br>	
@@ -55,10 +59,31 @@
 				<td class="align-middle justify-content-center text-center">${order.orderId}</td>
 				<td class="align-middle justify-content-center text-center">${order.customer.fullName}</td>
 				<td class="align-middle justify-content-center text-center">${order.pairOfShoes}</td>
-				<td class="align-middle justify-content-center text-center"><fmt:formatNumber type="currency" value="${order.orderSum}"/></td>
+				<td class="align-middle justify-content-center text-center">$${order.orderSum}</td>
 				<td class="align-middle justify-content-center text-center">${order.payment}</td>
-				<td class="align-middle justify-content-center text-center">${order.status}</td>
-				<td class="align-middle justify-content-center text-center">${order.orderDate}</td>
+				<td class="align-middle justify-content-center text-center">
+		            <c:choose>
+		                <c:when test="${order.status == 'Processing'}">
+		                    <span class="badge bg-warning text-dark">${order.status}</span>
+		                </c:when>
+		                <c:when test="${order.status == 'Shipping'}">
+		                    <span class="badge bg-info text-dark">${order.status}</span>
+		                </c:when>
+		                <c:when test="${order.status == 'Delivered'}">
+		                    <span class="badge bg-primary">${order.status}</span>
+		                </c:when>
+		                <c:when test="${order.status == 'Completed'}">
+		                    <span class="badge bg-success">${order.status}</span>
+		                </c:when>
+		                <c:when test="${order.status == 'Cancelled'}">
+		                    <span class="badge bg-danger">${order.status}</span>
+		                </c:when>
+		                <c:otherwise>
+		                    <span class="badge bg-secondary">${order.status}</span>
+		                </c:otherwise>
+		            </c:choose>
+        		</td>				
+        		<td class="align-middle justify-content-center text-center">${order.orderDate}</td>
 				
 				<td class="align-middle justify-content-center text-center">
 					<a href="view_order?orderId=${order.orderId}" class="btn btn-outline-primary">Details</a>	&nbsp;

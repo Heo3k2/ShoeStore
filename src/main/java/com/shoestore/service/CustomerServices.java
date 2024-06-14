@@ -126,12 +126,8 @@ public class CustomerServices {
 		
 		if(customerByEmail != null && customerByEmail.getCustomerId() != customerId) {
 			message = "Could not update the customer ID: " + customerId + " since there is another user with the email address: " + email;
-			
-		}
+			}
 		else {
-
-			
-			
 			Customer customerById = customerDAO.get(customerId);
 			updateCustomerFieldsFromForm(customerById);
 			
@@ -139,7 +135,6 @@ public class CustomerServices {
 			
 			message = "The customer has been updated successfully";
 		}
-		
 		listCustomer(message);
 	}
 
